@@ -49,26 +49,40 @@ def draw_upside_down_wall(rectangle, n, window):
     and n is nonnegative.
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #     Some tests are already written for you (above).
     # ------------------------------------------------------------------
-    # Find & store reference values:
-    ulc_coordinates = rectangle.get_upper_left_corner()
-    ulc_x_ref = ulc_coordinates.x
-    ulc_y_ref = ulc_coordinates.y
-    lrc_coordinates = rectangle.get_lower_right_corner()
-    lrc_x_ref = lrc_coordinates.x
-    lrc_y_ref = lrc_coordinates.y
+    # Store values for bottom rectangle:
+    ulc_coordinates_bottom_rect = rectangle.get_upper_left_corner()
+    ulc_x_bottom_rect = ulc_coordinates_bottom_rect.x
+    ulc_y_bottom_rect = ulc_coordinates_bottom_rect.y
+    lrc_coordinates_bottom_rect = rectangle.get_lower_right_corner()
+    lrc_x_bottom_rect = lrc_coordinates_bottom_rect.x
+    lrc_y_bottom_rect = lrc_coordinates_bottom_rect.y
     width = rectangle.get_width()
     height = rectangle.get_height()
+    # print(ulc_x_bottom_rect, ulc_y_bottom_rect, lrc_x_bottom_rect, lrc_y_bottom_rect)
 
-    # Create loop to build wall:
-    for k in range(-n//2, n//2):
-        for j in range(k//2):
-            ulc_x = ulc_x_ref + 0.5*width*j
-            ulc_y = ulc_y_ref - height*k
-            lrc_x = lrc_x_ref + 0.5 * width * j
-            lrc_y = ulc_y_ref - height * k
+    # Find upper left corner and lower right corner for top/leftmost rectangle:
+    ulc_x_ref = ulc_x_bottom_rect - (n-1)*0.5*width
+    ulc_y_ref = ulc_y_bottom_rect - (n-1)*height
+    lrc_x_ref = lrc_x_bottom_rect - (n-1)*0.5*width
+    lrc_y_ref = lrc_y_bottom_rect - (n-1)*height
+
+    # Loop to create wall:
+    for k in range(n, 0, -1):
+        for j in range(k):
+            ulc_x = ulc_x_ref + j*width
+            lrc_x = lrc_x_ref + j*width
+            new_rectangle = rg.Rectangle(rg.Point(ulc_x, ulc_y_ref), rg.Point(lrc_x, lrc_y_ref))
+            new_rectangle.attach_to(window)
+        # if k == 1:
+            # print(ulc_x_ref, ulc_y_ref, lrc_x_ref, lrc_y_ref)
+        ulc_x_ref = ulc_x_ref + 0.5*width
+        ulc_y_ref = ulc_y_ref + height
+        lrc_x_ref = lrc_x_ref + 0.5*width
+        lrc_y_ref = lrc_y_ref + height
+    window.render()
 
 
 # ----------------------------------------------------------------------
